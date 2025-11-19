@@ -1,0 +1,1755 @@
+<!doctype html><html><head><link rel="stylesheet" type="text/css" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css"><script type="text/javascript" src="https://unpkg.com/bootstrap/dist/js/bootstrap.min.js"></script><script type="text/javascript" src="https://unpkg.com/jquery/dist/jquery.min.js"></script><style type="text/css">html * {
+    font-family: 'Times New Roman', Times, serif;
+}
+
+button {
+    background-color: #b99dff;
+    outline-color: grey;
+    border: none;
+    border-radius:  0.6rem;
+    padding: 0.5rem 1rem;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+
+#verbs {
+    overflow-x: hidden;
+}
+
+.row {
+    margin-top: 0.4rem;
+}
+
+.col {
+    padding: 1rem;
+}
+
+.grid_form {
+    width: 42rem;
+    margin-left: 2rem;
+}
+
+.container-fluid {
+    padding: 1rem;
+    border: 0.4rem solid #524765;
+    border-radius:  0.6rem;
+}
+
+.word_suggestion {
+    display: block;
+    border-color: aliceblue;
+    background-color: aliceblue;
+}
+
+.study-list-element:hover {
+    background-color: #D9D9D9;
+    color: grey;
+}
+
+.results-list-correct {
+    color: #31DA2B;
+}
+
+.results-list-correct:hover {
+    background-color: #B8FFB6;
+}
+
+.results-list-incorrect {
+    color: red;
+    /* background-color: none; */
+}
+
+.results-list-incorrect:hover {
+    background-color: #FFB5C1;
+}
+
+.current-study-word-header {
+    text-decoration: underline;
+}
+
+.check_answers_button {
+    position: absolute;
+    left: 50%;
+}
+
+.corner_button {
+    position: absolute;
+    top: 80%;
+    left: 75%;
+}
+
+.form-select {
+    background-color: #b99dff;
+    border-radius:  0.6rem;
+}
+
+#autocomplete_search {
+    position: absolute;
+    top: 10%;
+    left: 75%;
+}
+
+.words_list {
+    position: absolute;
+    left: 10%;
+    top: 10%;
+}
+
+#next_word_button {
+    position: absolute;
+    left: 90%;
+}</style></head><body><!DOCTYPE html>
+<title>Latin Study Practice</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<container id="study_words_menu" class="menu-grid">
+    <div class="row">
+        <div class="col">
+            <ul id="study_words_list" class="list-group list-group-flush words_list">
+                <h2><strong>Current Study Words:<strong></h2>
+            </ul>
+        </div>
+        <div class="col">
+            <div id="autocomplete_search" style="width:300px;">
+                <input id="word_search_box" type="text" name="word_search_box" placeholder="Please enter a Latin word...">
+                <button id="submit_word_search_input" type="submit" onclick="submitStudyWord()">Submit</button>
+
+                <div id="suggestions" class="suggestions"></div>
+            </div>
+        </div>
+    </div>
+    <button id="begin_practicing_button" class="corner_button" onclick="showNextStudyScreen()">Begin Practicing</button>
+</container>
+
+<div class="grid" id="verbs_screen">
+
+    <div class="row">
+        <div class="col">
+		    <h1 id="verb_study_word_principle_parts" class="current-study-word-header"></h1>
+        </div>
+        <div class="col">
+            <select id="select_gender_dropdown" class="form-select" aria-label="Select Gender">
+            <option value="F">Fem</option>
+            <option value="M">Masc</option>
+            <option value="N">Neuter</option>
+            </select>
+        </div>
+        <div class="col">
+            <select id="select_person_dropdown"class="form-select" aria-label="Select Person">
+                <option value="1">1st Person</option>
+                <option value="2">2nd Person</option>
+                <option value="3">3rd Person</option>
+            </select>
+        </div>
+        <div class="col">
+            <select id="select_number_dropdown" class="form-select" aria-label="Select Number">
+                <option value="Sing">Singular</option>
+                <option value="Pl">Plural</option>
+            </select>
+        </div>
+    </div>
+
+
+<div class="row">
+<!--Indicative Continuing and Imperative-->
+
+    <div class="col">
+        <div class="grid_form" id="indicative_continuing">
+        <label for="container_indicativecontinuing">Indicative; - Continuing Action</label>
+        <div class="container-fluid" id="container_indicativecontinuing">
+
+            <div class="row">
+            <div class="col-sm" id="col_indicative_tense">
+            </div>
+            <div class="col-sm" id="indicative_active_label">
+                    <label for="col_indicative_active">Active</label>
+            </div>
+            <div class="col-sm" id="indicative_passive_label">
+                    <label for="col_indicative_passive">Passive</label><br />
+            </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm" id="col_indicative_tense">
+                    <p1>Present</p1>
+                </div>
+                <div class="col-sm" id="col_indicative_active">
+                    <input type="text" class="indicative_continuing" id="indicative_present_active" name="indicative_present_active"/>
+                </div>
+                <div class="col-sm" id="col_indicative_passive">
+                    <input type="text" class="indicative_continuing" id="indicative_present_passive" name="indicative_present_passive"/>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm" id="col_indicative_tense">
+                    <p1>Imperfect</p1>
+                </div>
+                <div class="col-sm">
+                    <input type="text" class="indicative_continuing" id="indicative_imperfect_active" name="indicative_imperfect_active" />
+                </div>
+                <div class="col-sm">
+                    <input type="text" class="indicative_continuing" id="indicative_imperfect_passive" name="indicative_imperfect_passive"/>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm" id="col_indicative_tense">
+                    <p1>Future</p1>
+                </div>
+                <div class="col-sm">
+                    <input type="text" class="indicative_continuing" id="indicative_future_active" name="indicative_future_active" />
+                </div>
+                <div class="col-sm">
+                    <input type="text" class="indicative_continuing" id="indicative_future_passive" name="indicative_future_passive"/>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="grid_form" id="indicative_completed">
+	<label for="container_indicativecompleted">Indicative - Completed Action</label>
+	<div class="container-fluid" id="container_indicativecompleted">
+        <div class="row">
+          <div class="col-sm" id="col_indicative_tense">
+          </div>
+          <div class="col-sm" id="indicative_active_label">
+            <label for="col_indicativecompleted_active">Active</label>
+          </div>
+          <div class="col-sm" id="indicative_passive_label">
+            <label for="col_indicativecompleted_passive">Passive</label><br />
+		      </div>
+			</div>
+		
+      <div class="row">
+        <div class="col-sm" id="col_indicativecompleted_tense">
+          <p1>Perfect</p1>
+        </div>
+        <div class="col-sm" id="col_indicativecompleted_active">
+          <input type="text" class="indicative_completed" id="indicative_perfect_active" name="indicative_perfect_active"/>
+        </div>
+        <div class="col-sm" id="col_indicativecompleted_passive">
+          <input type="text" class="indicative_completed" id="indicative_perfect_passive" name="indicative_perfect_passive"/>
+        </div>
+      </div>
+		
+      <div class="row">
+        <div class="col-sm" id="col_indicativecompleted_tense">
+          <p1>Pluperfect</p1>
+        </div>
+        <div class="col-sm">
+          <input type="text" class="indicative_completed" id="indicative_pluperfect_active" name="indicative_pluperfect_active" />
+        </div>
+        <div class="col-sm">
+          <input type="text" class="indicative_completed" id="indicative_pluperfect_passive" name="indicative_pluperfect_passive"/>
+        </div>
+      </div>
+		
+			<div class="row">
+				<div class="col-sm" id="col_indicativecompleted_tense">
+					<p1>Future Perfect</p1>
+			  </div>
+			  <div class="col-sm">
+				  <input type="text" class="indicative_completed" id="indicative_futureperfect_active" name="indicative_futureperfect_active" />
+		    </div>
+			  <div class="col-sm">
+				  <input type="text" class="indicative_completed" id="indicative_futureperfect_passive" name="indicative_futureperfect_passive"/>
+		    </div>
+		</div>
+  </div>
+</div>
+</div>
+</div>
+
+<div class="row">
+<!--Indicative Completed and Subjunctive-->
+
+<div class="col">
+<div class="grid_form" id="subjunctive">
+  <label for="container_subjunctive">Subjunctive</label>
+  <div class="container-fluid" id="container_subjunctive">
+
+    <div class="row">
+      <div class="col-sm" id="col_subjunctive">
+      </div>
+      <div class="col-sm" id="subjunctive_active_label">
+			  <label for="col_subjunctive_active">Active</label>
+      </div>
+      <div class="col-sm" id="subjunctive_passive_label">
+			  <label for="col_subjunctive_passive">Passive</label><br />
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm" id="col_subjunctive_tense">
+        <p1>Present</p1>
+      </div>
+      <div class="col-sm" id="col_subjunctive_present">
+        <input type="text" class="subjunctive" id="indicative_present_active" name="subjunctive_present_active"/>
+      </div>
+      <div class="col-sm" id="col_subjunctive_passive">
+        <input type="text" class="subjunctive" id="subjunctive_present_passive" name="subjunctive_present_passive"/>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm" id="col_subjunctive_tense">
+        <p1>Imperfect</p1>
+      </div>
+      <div class="col-sm">
+        <input type="text" class="subjunctive" id="subjunctive_imperfect_active" name="subjunctive_imperfect_passive" />
+      </div>
+      <div class="col-sm">
+        <input type="text" class="subjunctive" id="subjunctive_imperfect_passive" name="subjunctive_imperfect_passive"/>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm" id="col_subjunctive_tense">
+        <p1>Perfect</p1>
+      </div>
+      <div class="col-sm">
+        <input type="text" class="subjunctive" id="subjunctive_perfect_active" name="subjunctive_perfect_active" />
+      </div>
+      <div class="col-sm">
+        <input type="text" class="subjunctive" id="subjunctive_perfect_passive" name="subjunctive_perfect_passive"/>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm" id="col_subjunctive_tense">
+        <p1>Pluperfect</p1>
+      </div>
+      <div class="col-sm">
+        <input type="text" class="subjunctive" id="subjunctive_pluperfect_active" name="subjunctive_pluperfect_active" />
+      </div>
+      <div class="col-sm">
+        <input type="text" class="subjunctive" id="subjunctive_pluperfect_passive" name="subjunctive_pluperfect_passive"/>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="col">
+<div class="grid_form" id="infinitive">
+	<label for="container_infinitive">Infinitive</label>
+	<div class="container-fluid" id="container_infinitive">
+        <div class="row">
+          <div class="col-sm" id="col_infinitive_tense">
+          </div>
+          <div class="col-sm" id="infinitive_active_label">
+            <label for="col_infinitive_active">Active</label>
+          </div>
+          <div class="col-sm" id="infinitive_passive_label">
+            <label for="col_infinitive_passive">Passive</label><br />
+		      </div>
+			</div>
+		
+      <div class="row">
+        <div class="col-sm" id="col_infinitive_tense">
+          <p1>Present</p1>
+        </div>
+        <div class="col-sm" id="col_infinitive_active">
+          <input type="text" class="infinitive" id="infinitive_present_active" name="infinitive_present_active"/>
+        </div>
+        <div class="col-sm" id="col_infinitive_passive">
+          <input type="text" class="infinitive" id="infinitive_present_passive" name="infinitive_present_passive"/>
+        </div>
+      </div>
+		
+      <div class="row">
+        <div class="col-sm" id="col_infinitive_tense">
+          <p1>Perfect</p1>
+        </div>
+        <div class="col-sm">
+          <input type="text" class="infinitive" id="infinitive_perfect_active" name="indicative_perfect_active" />
+        </div>
+        <div class="col-sm">
+          <input type="text" class="infinitive" id="indicative_perfect_passive" name="indicative_perfect_passive"/>
+        </div>
+      </div>
+		
+			<div class="row">
+				<div class="col-sm" id="col_infinitive_tense">
+					<p1>Future</p1>
+			  </div>
+			  <div class="col-sm">
+				  <input type="text" class="infinitive" id="infinitive_future_active" name="infinitive_future_active" />
+		    </div>
+			  <div class="col-sm">
+				  <input type="text" class="infinitive" id="infinitive_future_passive" name="infinitive_future_passive"/>
+		    </div>
+		</div>
+  </div>
+</div>
+</div>
+</div>
+
+<div class="row">
+<!--Infinitives and Participles-->
+<div class="col">
+<div class="grid_form" id="participle">
+	<label for="container_participle">Participle</label>
+	<div class="container-fluid" id="container_participle">
+        <div class="row">
+          <div class="col-sm" id="col_participle_tense">
+          </div>
+          <div class="col-sm" id="participle_active_label">
+            <label for="col_participle_active">Active</label>
+          </div>
+          <div class="col-sm" id="participle_passive_label">
+            <label for="col_participle_passive">Passive</label><br />
+		      </div>
+			</div>
+		
+      <div class="row">
+        <div class="col-sm" id="col_participle_tense">
+          <p1>Present</p1>
+        </div>
+        <div class="col-sm" id="col_participle_active">
+          <input type="text" class="participle" id="participle_present_active" name="participle_present_active"/>
+        </div>
+        <div class="col-sm" id="col_participle_passive">
+          <input type="text" class="participle" id="participle_present_passive" name="participle_present_passive"/>
+        </div>
+      </div>
+		
+      <div class="row">
+        <div class="col-sm" id="col_participle_tense">
+          <p1>Perfect</p1>
+        </div>
+        <div class="col-sm">
+          <input type="text" class="participle" id="participle_perfect_active" name="participle_perfect_active" />
+        </div>
+        <div class="col-sm">
+          <input type="text" class="participle" id="participle_perfect_passive" name="participle_perfect_passive"/>
+        </div>
+      </div>
+		
+	<div class="row">
+	    <div class="col-sm" id="col_participle_tense">
+			<p1>Future</p1>
+		</div>
+		<div class="col-sm">
+		    <input type="text" class="participle" id="participle_future_active" name="participle_future_active" />
+		</div>
+        <div class="col-sm">
+            <input type="text" class="participle" id="participle_future_passive" name="participle_future_passive"/>
+        </div>
+	</div>
+  </div>
+</div>
+</div>
+
+<div class="col">
+<div class="grid_form" id="imperative">
+<label for="container_imperative">Imperative</label>
+<div class="container-fluid" id="container_imperative">
+
+	<div class="row">
+		<div class="col-sm" id="col_imperative_tense">
+		</div>
+		<div class="col-sm" id="imperative_active_label">
+			<label for="col_imperative_active">Active</label>
+		</div>
+		<div class="col-sm" id="imperative_passive_label">
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-sm" id="col_imperative_tense">
+			<p1>Present</p1>
+		</div>
+		<div class="col-sm" id="col_imperative_active">
+			<input type="text" class="imperative" id="imperative_present_active" name="imperative_present_active"/>
+      </div>
+			<div class="col-sm" id="col_imperative_passive">
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+</div>
+
+<button id="check_verbs_button" class="check_answers_button" type="submit" onclick="checkVerbForms()">Submit</button>
+<button id="next_word_verbs_button" class="check_answers_button" type="submit" onclick="showNextStudyScreen()">Next</button>
+</div>
+
+<div class="grid-form" id="nouns_screen">
+	<h1 id="noun_study_word_principle_parts" style="current_study_word_header"></h1>
+    <div class="row">
+
+            <div class="col" id="noun_col_sing">
+						<label for="container_nouns_sing">Singular Declensions</label>
+						<div class="container-fluid" id="container_nouns_sing">
+                <div class="row">
+                    <div class="col-sm" id="noun_sing_labels">
+                        <div class="row"><p1>Nominative Singular</p1></div>
+                        <div class="row"><p1>Genetive Singular</p1></div>
+                        <div class="row"><p1>Dative Singular</p1></div>
+                        <div class="row"><p1>Accusative Singular</p1></div>
+                        <div class="row"><p1>Ablative Singular</p1></div>
+                    </div>
+                    <div class="col-sm" id="noun_sing_forms">
+                        <input type="text" class="row noun_form" id="nom_sing_form" name="nom_sing_form"/>
+                        <input type="text" class="row noun_form" id="gen_sing_form" name="gen_sing_form"/>
+                        <input type="text" class="row noun_form" id="dat_sing_form" name="dat_sing_form"/>
+                        <input type="text" class="row noun_form" id="acc_sing_form" name="acc_sing_form"/>
+                        <input type="text" class="row noun_form" id="abl_sing_form" name="abl_sing_form"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col" id="noun_col_pl">
+			<label for="container_nouns_pl">Plural Declensions</label>
+			<div class="container-fluid" id="container_nouns_pl">
+                <div class="row">
+                    <div class="col-sm" id="noun_pl_labels">
+                        <div class="row"><p1>Nominative Plural</p1></div>
+                        <div class="row"><p1>Genetive Plural</p1></div>
+                        <div class="row"><p1>Dative Plural</p1></div>
+                        <div class="row"><p1>Accusative Plural</p1></div>
+                        <div class="row"><p1>Ablative Plural</p1></div>
+                    </div>
+                    <div class="col-sm" id="noun_pl_forms">
+                        <input type="text" class="row noun_form" id="nom_pl_form" name="nom_pl_form"/>
+                        <input type="text" class="row noun_form" id="gen_pl_form" name="gen_pl_form"/>
+                        <input type="text" class="row noun_form" id="dat_pl_form" name="dat_pl_form"/>
+                        <input type="text" class="row noun_form" id="acc_pl_form" name="acc_pl_form"/>
+                        <input type="text" class="row noun_form" id="abl_pl_form" name="abl_pl_form"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	<button id="check_nouns_button" class="check_answers_button" type="submit" onclick="checkNounForms()">Submit</button>
+	<button id="next_word_nouns_button" class="check_answers_button" type="submit" onclick="showNextStudyScreen()">Next</button>
+</div>
+
+<div id="results_screen">
+    <ul id="results_words_list" class="list-group list-group-flush words_list">
+        <h1><strong>Results<strong></h1>
+    </ul>
+    <button id="return_main_menu_button" class="corner_button" onclick="returnMainMenu()">Return Main Menu</button>
+</div><script type="text/javascript">
+
+class Entry {
+    constructor(
+        dictEntry, 
+        definition, 
+        wordType, 
+        conjugation, 
+        declension, 
+        gender, 
+        variation, 
+        wordStems, 
+        nounCases, 
+        verbTenses, 
+        displayText, 
+        incorrect, 
+        userAnswers
+    ) {
+        this.dictEntry = dictEntry; // Full string entry
+        this.definition = definition; // String definition
+
+        this.wordType = wordType; // Character for type (eg. noun or verb)
+        this.conjugation = conjugation; // Integer for verb conjugation
+        this.declension = declension; // Integer for noun declension.
+        this.gender = gender; // Character for noun gender
+        this.variation = variation; // Integer for word variation (same position in entry string for both noun and verb)
+        
+        this.wordStems = wordStems; // Key pieces of words to form principle parts
+        this.nounCases = nounCases; // All possible noun forms
+        this.verbTenses = verbTenses; // All possible verb forms
+        this.displayText = displayText; // Principle parts to display for user when selecting study words
+
+        this.incorrect = incorrect; // Boolean for if user submit all correct word forms
+        this.userAnswers = userAnswers; // 2D array: array of user inputted answers per element of word form group array
+                                        // (E.g. userAnswers[0][1] gives the second user answer for the present tense if verb) 
+    }
+}
+
+class Endings {
+    static Nouns = class {
+        static FIRST = ["a", "ae", "ae", "am", "a", "ae", "arum", "is", "as", "is"];
+        static SECOND = ["us", "i", "o", "um", "o", "i", "orum", "is", "os", "is"];
+        static SECOND_NEUTER = ["um", "i", "o", "um", "o", "a", "orum", "is", "a", "is"];
+        static THIRD = ["", "is", "i", "em", "e", "es", "um", "ibus", "es", "ibus"];
+    }
+    static Tenses = class {
+        static PRES_ACT = ["o", "s", "t", "mus", "tis", "nt"];
+        static PRES_PASS = ["r", "ris", "tur", "mur", "mini", "ntur"];
+
+        //We can use so many arrays here because there are no modifications
+        static PERFECT_ACT = ["i", "isti", "it", "imus", "istis", "erunt"];
+        static PLUPERF_ACT = ["eram", "eras", "erat", "eramus", "eratis", "erant"];
+        static FUTPERF_ACT = ["ero", "eris", "erit", "erimus", "eritis", "erint"];
+
+        static PERFECT_PASS = ["sum", "es", "est", "sumus", "estis", "sunt"];
+        static PERFECT_SUBJUNCT_PASS = ["sim", "sis", "sint", "simus", "sitis", "sint"];
+        static PLUPERF_SUBJUNCT_PASS = ["essem", "esses", "esset", "essemus", "essetis", "essent"];
+    }
+    static Infinitives = class {
+        static PRES_ACT = ["are", "ere", "ere", "ire"];
+    }
+    static Subjunctives = class {
+        static PRESENT_MODS = ["e", "ea", "a", "ia"];
+    }
+
+}
+
+let globalEntries = [];
+
+const GLOBAL_VOWELS = "aeiou";
+const dictUrl =
+    "https://raw.githubusercontent.com/CeleryMan15/words/refs/heads/main/DICTLINE.txt";
+
+const mainMenu = document.getElementById("study_words_menu");
+const verbsScreen = document.getElementById("verbs_screen")
+const nounsScreen = document.getElementById("nouns_screen");
+const resultsScreen = document.getElementById("results_screen") 
+
+const studyWordSubmitButton = document.getElementById("submit_word_search_input");
+const studyWordsUl = document.getElementById("study_words_list");
+const wordSearchBox = document.getElementById("word_search_box");
+const wordSuggestions = document.getElementById("suggestions");
+
+const resultsWordsUl = document.getElementById("results_words_list");
+
+const submitVerbsButton = document.getElementById("check_verbs_button");
+const nextWordVerbsButton = document.getElementById("next_word_verbs_button");
+
+const verbStudyWord = document.getElementById("verb_study_word_principle_parts");
+const selectGenderDropdown = document.getElementById("select_gender_dropdown");
+const selectPersonDropdown = document.getElementById("select_person_dropdown");
+const selectNumberDropdown = document.getElementById("select_number_dropdown");
+
+const nounStudyWord = document.getElementById("noun_study_word_principle_parts");
+const submitNounsButton = document.getElementById("check_nouns_button");
+const nextWordNounsButton = document.getElementById("next_word_nouns_button");
+
+let suggestions = [];
+let entrySuggestions = [];
+
+let studyWords = [];
+let availableStudyWords = [];
+
+let currentStudyWord;
+
+wordSearchBox.addEventListener('keydown', (e) => {
+    const searchInput = wordSearchBox.value.toLowerCase();
+    wordSuggestions.innerHTML = '';
+
+    let displayedSuggestions = [];
+
+    if (e.key == "Enter") {
+        submitStudyWord();
+    }
+
+    if (searchInput) {
+        for (let i = 0; i < suggestions.length; i++) {
+            if (suggestions[i].toLowerCase().includes(searchInput) && displayedSuggestions.length <= 10) {
+                displayedSuggestions.push(suggestions[i]);
+            }
+        }
+
+        for (let i = 0; i < displayedSuggestions.length; i++) {
+            const suggestionDiv = document.createElement("input");
+
+            suggestionDiv.classList.add("word_suggestion");
+            suggestionDiv.type = "submit";
+            suggestionDiv.value = displayedSuggestions[i];
+
+            suggestionDiv.onclick = function() {
+                wordSearchBox.value = displayedSuggestions[i];
+                for (let j = 0; j < displayedSuggestions.length; j++) { //Delete all created buttons
+                    wordSuggestions.firstElementChild.remove();
+                }
+                studyWordSubmitButton.focus();
+            };
+
+            wordSuggestions.appendChild(suggestionDiv); // Add button as a viewable option
+        }
+        wordSuggestions.style.display = 'block'; // Line up suggestions vertically
+    }
+    else {
+        wordSuggestions.style.display = "none"; //Don't show suggestions if we don't need to
+    }
+});
+
+function handleRemoveStudyWord(studyWordElement, index) {
+    studyWordElement.onmouseover = function () {
+        if (studyWordElement.childElementCount == 0) { // If the element has no child icon
+            trashIcon = document.createElement("i"); // Add trash icon
+            trashIcon.classList.add("bi", "bi-trash");
+            studyWordElement.appendChild(trashIcon);
+            studyWordElement.style.color = "grey";
+        }
+    }
+
+    studyWordElement.onmouseleave = function () {
+        studyWordElement.firstElementChild.remove(); //Remove the existing trash icon
+        studyWordElement.style.color = "";
+    }
+
+    studyWordElement.onclick = function () {
+        studyWordElement.remove(); // Remove the word from the study words list
+        let nIndex = studyWords.indexOf(entrySuggestions[index]);
+        availableStudyWords.splice(nIndex, 1);
+        studyWords.splice(nIndex, 1);
+    }
+}
+
+function addStudyWordListElement(studyWordElement, index) {
+    studyWordElement.type = "submit";
+    studyWordElement.classList.add("list-group-item", "study-list-element");
+    studyWordElement.innerHTML = suggestions[index] + " - " + entrySuggestions[index].definition;
+    studyWordsUl.appendChild(studyWordElement);
+}
+
+function addResultsWordListElement(resultsWordElement, index, incorrect) {
+    resultsWordElement.classList.add("list-group-item");
+    resultsWordElement.type = "submit";
+    resultsWordElement.innerHTML = studyWords[index].displayText + " - " + studyWords[index].definition;
+
+    incorrect ? resultsWordElement.classList.add("results-list-incorrect") : resultsWordElement.classList.add("results-list-correct");
+
+    resultsWordsUl.appendChild(resultsWordElement);
+}
+
+function handleRevisitAnswers(resultsWordElement, entry) {
+    resultsWordElement.onmouseover = function () {
+        if (resultsWordElement.childElementCount == 0) {
+            let originalText = resultsWordElement.innerHTML;
+            resultsWordElement.innerHTML = "<i class='bi bi-arrow-right' style='color: black'></i>  " + originalText;
+            resultsWordElement.style.color = "grey";
+        }
+    }
+
+    resultsWordElement.onmouseleave = function () {
+        resultsWordElement.firstElementChild.remove();
+        resultsWordElement.style.color = "";
+    }
+    resultsWordElement.onclick = function () {
+        currentStudyWord = entry;
+        entry.wordType == "N" ? showNounScreen() : showVerbScreen();
+    }
+}
+
+function fillResultsList() {
+    for (let i = 0; i < resultsWordsUl.children.length; i++) {
+        resultsWordsUl.removeChild(resultsWordsUl.lastChild);
+    }
+
+    for (let i = 0; i < studyWords.length; i++) {
+        const resultsWordElement = document.createElement("li");
+        addResultsWordListElement(resultsWordElement, i, studyWords[i].incorrect);
+        handleRevisitAnswers(resultsWordElement, studyWords[i]);
+    }
+}
+
+function submitStudyWord() {
+    let index = suggestions.indexOf(wordSearchBox.value);
+    studyWords.push(entrySuggestions[index]);
+    availableStudyWords.push(entrySuggestions[index]);
+
+    const studyWordElement = document.createElement("li");
+    addStudyWordListElement(studyWordElement, index);
+    handleRemoveStudyWord(studyWordElement, index);
+
+    wordSearchBox.focus();
+    wordSearchBox.value = ""; //MUST KEEP AT END OF FUNCTION
+}
+
+function resetAllInputs() {
+    let inputForms = document.getElementsByTagName("input");
+    for (let i = 0; i < inputForms.length; i++) {
+        inputForms[i].value = "";
+        inputForms[i].style.backgroundColor = "";
+        inputForms[i].readOnly = false;
+        selectGenderDropdown.disabled = false;
+        selectPersonDropdown.disabled = false;
+        selectNumberDropdown.disabled = false;
+    }
+}
+
+function fillPreviousVerbType(formClass, i) {
+    var allForms = document.getElementsByClassName(formClass);
+    for (let j = 0; j < allForms.length; j++) {
+        if (currentStudyWord.userAnswers[i][j] != null) {
+            allForms.item(j).value += currentStudyWord.userAnswers[i][j];
+        }
+    }
+}
+
+function fillPreviousVerbForms() {
+    const formClassNames = [
+        "indicative_continuing", 
+        "indicative_completed", 
+        "subjunctive", 
+        "imperative", 
+        "infinitive", 
+        "participle"
+    ];
+
+    for (let i = 0; i < currentStudyWord.userAnswers.length; i++) {
+        fillPreviousVerbType(formClassNames[i], i);
+    }
+    checkVerbForms();
+}
+
+function clearVerbScreen() {
+    verbsScreen.hidden = false;
+    mainMenu.hidden = true;
+    nounsScreen.hidden = true;
+    resultsScreen.hidden = true;
+
+    resetAllInputs();
+    if (availableStudyWords.length > 0) {
+        submitVerbsButton.hidden = false;
+        nextWordVerbsButton.hidden = true;
+    }
+    else {
+        fillPreviousVerbForms();
+    }
+
+    verbStudyWord.innerHTML = currentStudyWord.verbTenses[0] + ", " + currentStudyWord.verbTenses[120] + ", " + currentStudyWord.verbTenses[36] + ", " + currentStudyWord.verbTenses[156] + " (" + currentStudyWord.conjugation + ")";
+}
+
+function fillPreviousNounForms() {
+    var allForms = document.getElementsByClassName("noun_form");
+    for (let i = 0; i < currentStudyWord.userAnswers.length; i++) {
+        for (let j = 0; j < allForms.length; j++) {
+            if (currentStudyWord.userAnswers[i][j] != null) {
+                allForms.item(j).value += currentStudyWord.userAnswers[i][j];
+            }
+        }
+    }
+    checkNounForms(); // Fill forms with previous answers, then re-check
+}
+
+function clearNounScreen() {
+    nounsScreen.hidden = false;
+    verbsScreen.hidden = true;
+    mainMenu.hidden = true;
+    resultsScreen.hidden = true;
+
+    resetAllInputs();
+    if (availableStudyWords.length > 0) {
+        submitNounsButton.hidden = false;
+        nextWordNounsButton.hidden = true;
+    }
+    else {
+        fillPreviousNounForms();
+    }
+
+    nounStudyWord.innerHTML = currentStudyWord.nounCases[0] + ", " + currentStudyWord.nounCases[1] + " (" + currentStudyWord.gender + ")";
+}
+
+function showVerbScreen() {
+    clearVerbScreen();
+}
+
+function showNounScreen() {
+    clearNounScreen();
+}
+
+function displayCurrentStudyWord() {
+    if (currentStudyWord.wordType == "N" && currentStudyWord.nounCases[0] != null) {
+        showNounScreen();
+    }
+    else if (currentStudyWord.wordType == "V" && currentStudyWord.verbTenses != null) {
+        showVerbScreen();
+    }
+}
+
+function pickRandomStudyWord() {
+    let pickedEntry = availableStudyWords[Math.floor(Math.random() * availableStudyWords.length)];
+    currentStudyWord = pickedEntry;
+    displayCurrentStudyWord();
+}
+
+function returnMainMenu() {
+    resetAvailableWords();
+    resultsScreen.hidden = true;
+    verbsScreen.hidden = true;
+    nounsScreen.hidden = true;
+    mainMenu.hidden = false;
+}
+
+function resetAvailableWords() {
+    for (let i = 0; i < studyWords.length; i++) {
+        availableStudyWords.push(studyWords[i]);
+    }
+}
+
+function displayResultsScreen() {
+    fillResultsList();
+    mainMenu.hidden = true;
+    verbsScreen.hidden = true;
+    nounsScreen.hidden = true;
+    resultsScreen.hidden = false;
+}
+
+function showNextStudyScreen() {
+    availableStudyWords.length > 0 ? pickRandomStudyWord() : displayResultsScreen();
+}
+
+function checkVerbTenses(startIndex, endIndex, forms, verbTenses, indexMod) {
+    let incorrectAnswers = [];
+
+    for (let i = startIndex; i < endIndex; i += 6) { // Check Indicative Continuings
+        let j = Math.round((i / 6) - 0.34 - indexMod); // - 0.34 to ensure that it rounds down
+        forms[j] != verbTenses[i] ? incorrectAnswers.push(j) : null;
+    }
+
+    return incorrectAnswers;
+}
+
+function checkInfinitiveTenses(forms, verbTenses) {
+    let incorrectAnswers = [];
+
+    for (let i = 120; i < 126; i++) { // Check Infinitives
+        let j = i - 120;
+        forms[j] != verbTenses[i] ? incorrectAnswers.push(j) : null;
+    }
+
+    return incorrectAnswers;
+}
+
+function checkParticipleCases(forms, verbTenses) {
+    let incorrectAnswers = [];
+
+    for (let i = 126; i < 186; i += 10) { // Check Participles
+        let j = ((i + 4) / 10) - 13;
+        forms[j] != verbTenses[i] ? incorrectAnswers.push(j) : null;
+    }
+
+    return incorrectAnswers;
+}
+
+function combineIncorrects(continuingIncorrects, completedIncorrects, subjunctiveIncorrects, infinitiveIncorrects, participleIncorrects) {
+    let incorrectAnswers = [];
+
+    incorrectAnswers = incorrectAnswers.concat(continuingIncorrects);
+    incorrectAnswers = incorrectAnswers.concat(completedIncorrects);
+    incorrectAnswers = incorrectAnswers.concat(subjunctiveIncorrects);
+    incorrectAnswers = incorrectAnswers.concat(infinitiveIncorrects);
+    incorrectAnswers = incorrectAnswers.concat(participleIncorrects);
+    
+    return incorrectAnswers;
+}
+
+function displayIncorrectImperativeAnswers(incorrects, verbTenses, pluralModifier) {
+    var allForms = document.getElementsByClassName("imperative");
+    if (incorrects.includes(0)) {
+        allForms[0].style.backgroundColor = "#FF7F7F";
+        allForms[0].value += " *" + verbTenses[verbTenses.length - pluralModifier]; // display actual answer from entry.verbTenses     
+    }
+    else {
+        allForms[0].style.backgroundColor = "#8AFF92"; // Mark as green for correct
+    }
+}
+
+function displayIncorrectParticipleAnswers(incorrects, verbTenses) {
+    var allForms = document.getElementsByClassName("participle");
+    for (let i = 0; i < 6; i++) {
+        if(incorrects.includes(i)) {
+            allForms[i].style.backgroundColor = "#FF7F7F";
+            allForms[i].value += " *" + verbTenses[(i*10) + 126]; // display actual answer from entry.verbTenses     
+        }
+        else {
+            allForms[i].style.backgroundColor = "#8AFF92"; // Mark as green for correct
+        }
+    }
+}
+
+function displayIncorrectInfinitiveAnswers(incorrects, verbTenses) {
+    var allForms = document.getElementsByClassName("infinitive");
+    for (let i = 0; i < 6; i++) {
+        if(incorrects.includes(i)) {
+            allForms[i].style.backgroundColor = "#FF7F7F";
+            allForms[i].value += " *" + verbTenses[i + 120]; // display actual answer from entry.verbTenses     
+        }
+        else {
+            allForms[i].style.backgroundColor = "#8AFF92"; // Mark as green for correct
+        }
+    }
+}
+
+function displayIncorrectVerbAnswers(formName, finalIndex, startIndexModifier, incorrects, verbTenses) {
+    var allForms = document.getElementsByClassName(formName); // Get all input fields from tense
+    for (let i = 0; i < finalIndex; i++) { // Indexes match amount of inputs for each word type.
+        if (incorrects.includes(i)) { // (If any of these indexes were flagged as incorrect earlier)
+            allForms[i].style.backgroundColor = "#FF7F7F";
+            allForms[i].value += " *" + verbTenses[(i * 6) + startIndexModifier]; // display actual answer from entry.verbTenses
+        }
+        else {
+            allForms[i].style.backgroundColor = "#8AFF92"; // Mark as green for correct
+        }
+
+        //Enable button to continue and disable all other interactions on page.
+        allForms[i].readOnly = true;
+        submitVerbsButton.hidden = true;
+        nextWordVerbsButton.hidden = false;
+
+        selectGenderDropdown.disabled = true;
+        selectPersonDropdown.disabled = true;
+        selectNumberDropdown.disabled = true;
+    }
+}
+
+function removeAvailableStudyWord() {
+    const index = availableStudyWords.indexOf(currentStudyWord);
+    if (index > -1) { // only splice array when item is found
+        availableStudyWords.splice(index, 1); // 2nd parameter means remove one item only
+    }
+}
+
+function checkVerbAnswers(person, number, formsIndicativeContinuing, formsIndicativeCompleted, formsSubjunctive, formsInfinitive, formsParticiple, formsImperative) {
+    let startIndex = 0;
+    let numberImperativeModifier = 2;
+    let verbTenses = currentStudyWord.verbTenses;
+
+    if (number == "Sing") {
+        startIndex = Number(person) - 1;
+    }
+    else {
+        startIndex = 3 + Number(person) - 1;
+        numberImperativeModifier = 1;
+    }
+
+    let continuingIncorrects = checkVerbTenses(startIndex, 36, formsIndicativeContinuing, verbTenses, 0);
+
+    let completedIncorrects = checkVerbTenses(36, 72, formsIndicativeCompleted, verbTenses, 6);
+    let subjunctiveIncorrects = checkVerbTenses(72, 120, formsSubjunctive, verbTenses, 12);
+    
+    let infinitiveIncorrects = checkInfinitiveTenses(formsInfinitive, verbTenses);
+    let participleIncorrects = checkParticipleCases(formsParticiple, verbTenses);
+
+    let incorrectAnswers = combineIncorrects(continuingIncorrects, completedIncorrects, subjunctiveIncorrects, infinitiveIncorrects, participleIncorrects);
+    let imperativeIncorrects = [];
+    formsImperative[0] != verbTenses[186] ? incorrectAnswers.push(formsImperative[0]) && imperativeIncorrects.push(0) : null;
+
+    currentStudyWord.incorrect = incorrectAnswers.length > 0;
+
+    displayIncorrectVerbAnswers("indicative_continuing", 6, startIndex, continuingIncorrects, verbTenses);
+    displayIncorrectVerbAnswers("indicative_completed", 6, startIndex + 36 , completedIncorrects, verbTenses);
+    displayIncorrectVerbAnswers("subjunctive", 8, startIndex + 72, subjunctiveIncorrects, verbTenses);
+
+    displayIncorrectInfinitiveAnswers(infinitiveIncorrects, verbTenses);
+    displayIncorrectParticipleAnswers(participleIncorrects, verbTenses);
+
+    displayIncorrectImperativeAnswers(imperativeIncorrects, verbTenses, numberImperativeModifier);
+
+    removeAvailableStudyWord();
+}
+
+function saveCurrentStudyWordForms(forms) {
+    currentStudyWord.userAnswers = [];
+    for (let i = 0; i < forms.length; i++) {
+        currentStudyWord.userAnswers.push([]);
+        for (let j = 0; j < forms[i].length; j++) {
+            currentStudyWord.userAnswers[i].push(forms[i][j]);
+        }
+    }
+
+}
+
+function checkVerbForms() {
+    const formsIndicativeContinuing = collect_forms("indicative_continuing");
+    const formsIndicativeCompleted = collect_forms("indicative_completed");
+    const formsSubjunctive = collect_forms("subjunctive");
+    const formsImperative = collect_forms("imperative");
+    const formsInfinitive = collect_forms("infinitive");
+    const formsParticiple = collect_forms("participle");
+
+    saveCurrentStudyWordForms([formsIndicativeContinuing, formsIndicativeCompleted, formsSubjunctive, formsImperative, formsInfinitive, formsParticiple]);
+    
+    currentStudyWord.gender = selectGenderDropdown.value;
+    fillEndings(currentStudyWord);
+    checkVerbAnswers(selectPersonDropdown.value, selectNumberDropdown.value, formsIndicativeContinuing, formsIndicativeCompleted, formsSubjunctive, formsInfinitive, formsParticiple, formsImperative);
+}
+
+function displayIncorrectNounAnswers(formName, incorrects) {
+    var allForms = document.getElementsByClassName(formName);
+    for (let i = 0; i < Endings.Nouns.FIRST.length; i++) {
+        if (incorrects.includes(i)) {
+            allForms[i].style.backgroundColor = "#FF7F7F";
+            allForms[i].value += " *" + currentStudyWord.nounCases[i];
+        }
+        else {
+            allForms[i].style.backgroundColor = "#8AFF92";
+        }
+
+        allForms[i].readOnly = true;
+        submitNounsButton.hidden = true;
+        nextWordNounsButton.hidden = false;
+    }
+}
+
+function checkNounAnswers(nounForms) {
+    let incorrectAnswers = [];
+    for (let i = 0; i < currentStudyWord.nounCases.length; i++) {
+        nounForms[i] != currentStudyWord.nounCases[i] ? incorrectAnswers.push(i) : null;
+    }
+    return incorrectAnswers;
+}
+
+function checkNounForms() {
+    const formsNoun = collect_forms("noun_form");
+
+    let incorrectAnswers = checkNounAnswers(formsNoun);
+    currentStudyWord.incorrect = incorrectAnswers.length > 0;
+
+    displayIncorrectNounAnswers("noun_form", incorrectAnswers);
+    saveCurrentStudyWordForms([formsNoun]);
+
+    removeAvailableStudyWord();
+}
+
+function collect_forms(formClass) {
+    var finalForms = [];
+    var allForms = document.getElementsByClassName(formClass); 
+    for (let i = 0; i < allForms.length; i++) {
+        if (allForms[i].value !== "") {
+            finalForms.push(allForms[i].value);
+        }
+        else {
+            finalForms.push(undefined);
+        }
+    }
+    return finalForms;
+}
+
+function initUI() {
+    mainMenu.hidden = true;
+    verbsScreen.hidden = true;
+    nounsScreen.hidden = true;
+    resultsScreen.hidden = true;
+    selectGenderDropdown.disabled = false;
+    selectPersonDropdown.disabled = false;
+    selectNumberDropdown.disabled = false;
+}
+
+//------------------------WORD FORMATIONS-----------------------------
+//Data parsing and word inflections code here
+
+//INFLECTIONS WHITAKERS FORMATTING
+//Parts...Type...Declension...x...Declension...Person...x...x...length(str)...ending...x...Simplicity (frequency)
+
+
+//BE CAREFUL FOR IO VERBS
+
+async function getDictionary() {
+    let data = await fetch(dictUrl); // Wait until URL data is fetched.
+    globalDictionary = await data.text(); // Wait until text is loaded from URL data.
+    parseDictionary(globalDictionary); // Parse all dictionary data into useable word forms.
+    mainMenu.hidden = false; //Finally display GUI for users.
+}
+
+
+function replaceFrom(string, indexStart, indexEnd, existingSubStr, replacementSubStr) {
+    let str = string;
+
+    str = str.substring(0, indexStart) +
+        str.substring(indexStart, indexEnd).replace(existingSubStr, replacementSubStr);
+
+    return str;
+}
+
+function isVowel(char) {
+    let vowels = GLOBAL_VOWELS;
+    let isVowel = vowels.indexOf(char) > 0; // If char appeasr in vowel string at some point, 
+    // make it true; otherwise, make it false.
+    return isVowel;
+}
+
+function matchGenderEnding(gender, plural, accusative) {
+    let ending = "";
+    let index = 0;
+
+    if (accusative) {
+        plural == true ? index = 8 : index = 3;
+    }
+    else {
+        plural == true ? index = 5 : index = 0;
+    }
+
+    gender == "M" ? ending = Endings.Nouns.SECOND[index] : null;
+    gender == "F" ? ending = Endings.Nouns.FIRST[index] : null;
+    gender == "N" ? ending = Endings.Nouns.SECOND_NEUTER[index] : null;
+
+    return ending;
+}
+
+function getGenderEndingArray(gender) {
+    let endings = [];
+
+    gender == "M" ? endings = Endings.Nouns.SECOND : null;
+    gender == "F" ? endings = Endings.Nouns.FIRST : null;
+    gender == "N" ? endings = Endings.Nouns.SECOND_NEUTER : null;
+
+    return endings;
+}
+
+function fillNounEndings(wordStems, declension, gender) {
+    let nounCases = [];
+
+    for (let i = 0; i < wordStems.length; i++) {
+        if (i == 0 && wordStems[i] != "") { //ternary since only checking declension a few times.
+            //Fill these endings for only the nominative singular (first in declensions)
+            declension == 1 ? nounCases.push(wordStems[i].toLowerCase() + Endings.Nouns.FIRST[i]) : null;
+            declension == 2 && gender == "M" ? nounCases.push(wordStems[i].toLowerCase() + Endings.Nouns.SECOND[i]) : null;
+            declension == 2 && gender == "N" ? nounCases.push(wordStems[i].toLowerCase() + Endings.Nouns.SECOND_NEUTER[i]) : null;
+            declension == 3 ? nounCases.push(wordStems[i].toLowerCase() + Endings.Nouns.THIRD[i]) : null;
+        }
+        else if (wordStems[i] != "") {
+            for (let j = 1; j < 10; j++) {
+                //Fill these endings for the rest of the declensions
+                declension == 1 ? nounCases.push(wordStems[i].toLowerCase() + Endings.Nouns.FIRST[j]) : null;
+                declension == 2 && gender == "M" ? nounCases.push(wordStems[i].toLowerCase() + Endings.Nouns.SECOND[j]) : null;
+                declension == 2 && gender == "N" ? nounCases.push(wordStems[i].toLowerCase() + Endings.Nouns.SECOND_NEUTER[j]) : null;
+                declension == 3 ? nounCases.push(wordStems[i].toLowerCase() + Endings.Nouns.THIRD[j]) : null;
+            }
+        }
+    }
+
+    return nounCases;
+}
+
+//---------------INDICATIVE CONTINUING---------------
+
+function fillIndContAct(
+    stem, 
+    differentFirstStem = stem, 
+    differentLastStem = stem, 
+    differentFirst = Endings.Tenses.PRES_ACT[0], 
+    differentMiddle = "", 
+    differentLast = differentMiddle
+) {
+    let tenses = [];
+
+    tenses.push(differentFirstStem + differentFirst); // First person sing active
+    for (let i = 1; i < Endings.Tenses.PRES_ACT.length - 1; i++) { // Active
+        let tense = stem + differentMiddle + Endings.Tenses.PRES_ACT[i];
+        tenses.push(tense);
+    }
+    //Third person plural active
+    let lastTenseAct = differentLastStem + differentLast + Endings.Tenses.PRES_ACT[Endings.Tenses.PRES_ACT.length - 1];
+
+    lastTenseAct = lastTenseAct.substring(0, lastTenseAct.length - 6) +
+        lastTenseAct.substring(lastTenseAct.length - 6, lastTenseAct.length).replace("int", "iunt");
+
+    tenses.push(lastTenseAct);
+
+    return tenses;
+}
+
+function fillIndContPass(stem, differentFirstStem = stem, differentLastStem = stem, differentFirst = Endings.Tenses.PRES_ACT[0], differentMiddle = "", differentLast = differentMiddle) {
+    let tenses = [];
+
+    //First person sing passive
+    tenses.push(differentFirstStem + differentFirst.replace("am", "a") + Endings.Tenses.PRES_PASS[0]);
+    for (let i = 1; i < Endings.Tenses.PRES_PASS.length - 1; i++) { // Passive
+        let tense = stem + differentMiddle + Endings.Tenses.PRES_PASS[i];
+        tenses.push(tense.replace("int", "iunt"));
+    }
+    //Third person plural passive
+    let lastTensePass = differentLastStem + differentLast + Endings.Tenses.PRES_PASS[Endings.Tenses.PRES_PASS.length - 1];
+
+    lastTensePass = lastTensePass.substring(0, lastTensePass.length - 6) +
+        lastTensePass.substring(lastTensePass.length - 6, lastTensePass.length).replace("int", "iunt");
+
+    tenses.push(lastTensePass);
+
+    return tenses;
+}
+
+function fillIndCont(stem, differentFirstStem = stem, differentLastStem = stem, differentFirst = Endings.Tenses.PRES_ACT[0], differentMiddle = "", differentLast = differentMiddle) {
+    let actTenses = fillIndContAct(stem, differentFirstStem, differentLastStem, differentFirst, differentMiddle, differentLast);
+    let passTenses = fillIndContPass(stem, differentFirstStem, differentLastStem, differentFirst, differentMiddle, differentLast);
+
+    let tenses = actTenses.concat(passTenses);
+    return tenses;
+}
+
+function fillPresent(wordStems, conjugation) {
+    let presTenses = [];
+    let presStem = wordStems[1];
+
+    if (!isVowel(presStem[presStem.length])) { // If NOT vowel and needs filler "a". too long for ternary
+        Endings.Infinitives.PRES_ACT[conjugation - 1] != null ? presStem += Endings.Infinitives.PRES_ACT[conjugation - 1][0] : null;
+    }
+
+    presTenses = fillIndCont(presStem, wordStems[0], undefined, undefined, undefined, undefined);
+    return presTenses;
+}
+
+function fillImperfect(wordStems, conjugation) {
+    let imperfTenses = [];
+    let imperfStem = wordStems[1]; //Otherwise, verb has no second principle part, so no imperf?
+
+    if (!isVowel(imperfStem[imperfStem.length])) {
+        Endings.Infinitives.PRES_ACT[conjugation - 1] != null ? imperfStem += Endings.Infinitives.PRES_ACT[conjugation - 1][0] : null;
+        conjugation == 4 ? imperfStem += "e" : null; //INFINITIVE STEM + "e"
+    }
+
+    imperfTenses = fillIndCont(imperfStem, undefined, undefined, "bam", "ba");
+    return imperfTenses;
+}
+
+function fillFuture(wordStems, conjugation) {
+    let futureTenses = [];
+    let futureStem = wordStems[1];
+
+    if (!isVowel(futureStem[futureStem]).length) {
+        Endings.Infinitives.PRES_ACT[conjugation - 1] != null ? futureStem += Endings.Infinitives.PRES_ACT[conjugation - 1][0] : null;
+    }
+
+    if (conjugation == 1 || conjugation == 2) {
+
+        futureTenses = fillIndCont(futureStem, undefined, undefined, "bo", "bi", "bu");
+    }
+    else {
+        futureTenses = fillIndCont(futureStem, undefined, undefined, "am", "e");
+        futureTenses[7] = futureTenses[7].replace("iris", "eris");
+        //just do as normal, then add "u" at end if 4th conjugation
+    }
+
+    return futureTenses;
+}
+
+//---------------INDICATIVE COMPLETED---------------
+
+function fillIndCompAct(stem, endings) {
+    let tenses = [];
+
+    for (let i = 0; i < Endings.Tenses.PERFECT_ACT.length; i++) { // Active
+        let tense = stem + endings[i];
+        tenses.push(tense);
+    }
+    return tenses;
+}
+
+function fillIndCompPass(stem, endings, gender) {
+    let tenses = [];
+    let genderEndingSing = matchGenderEnding(gender, false);
+    let genderEndingPl = matchGenderEnding(gender, true);
+
+    for (let i = 0; i < Endings.Tenses.PERFECT_PASS.length - 3; i++) { //Passive (2 part)
+        let tense = stem + genderEndingSing + " " + endings[i];
+        tenses.push(tense);
+    }
+
+    for (let i = 3; i < Endings.Tenses.PERFECT_PASS.length; i++) { //Passive (2 part)
+        let tense = stem + genderEndingPl + " " + endings[i];
+        tenses.push(tense);
+    }
+    return tenses;
+}
+
+function fillIndComp(wordStems, act_endings, pass_endings = act_endings, gender) {
+    let actTenses = fillIndCompAct(wordStems[2], act_endings);
+    let passTenses = fillIndCompPass(wordStems[3], pass_endings, gender);
+
+    let tenses = actTenses.concat(passTenses);
+    return tenses;
+}
+
+function fillPerfect(wordStems, gender) {
+    let tenses = fillIndComp(wordStems, Endings.Tenses.PERFECT_ACT, Endings.Tenses.PERFECT_PASS, gender);
+    return tenses;
+}
+
+function fillPluperfect(wordStems, gender) {
+    let tenses = fillIndComp(wordStems, Endings.Tenses.PLUPERF_ACT, undefined, gender);
+    return tenses;
+}
+
+function fillFuturePerfect(wordStems, gender) {
+    let tenses = fillIndComp(wordStems, Endings.Tenses.FUTPERF_ACT, undefined, gender);
+    tenses[11] = tenses[11].replace("erint", "erunt");
+
+    return tenses;
+}
+
+//---------------SUBJUNCTIVE---------------
+
+function fillSubjunctiveAct(stem, modifier) {
+    let tenses = [];
+
+    tenses.push(stem + modifier + "m");
+    for (let i = 1; i < Endings.Tenses.PRES_ACT.length; i++) {
+        let tense = stem + modifier + Endings.Tenses.PRES_ACT[i];
+        tenses.push(tense);
+    }
+
+    return tenses;
+}
+
+function fillSubjunctiveContPass(stem, modifier) {
+    let tenses = [];
+
+    tenses.push(stem + modifier + "r");
+    for (let i = 1; i < Endings.Tenses.PRES_ACT.length; i++) {
+        let tense = stem + modifier + Endings.Tenses.PRES_PASS[i];
+        tenses.push(tense);
+    }
+
+    return tenses;
+}
+
+function fillSubjunctiveCont(stem, modifier) {
+    let tenses = [];
+
+    let actTenses = fillSubjunctiveAct(stem, modifier);
+    let passTenses = fillSubjunctiveContPass(stem, modifier);
+
+    tenses = tenses.concat(actTenses);
+    tenses = tenses.concat(passTenses);
+
+    return tenses;
+}
+
+function fillSubjunctivePerfect(stems, modifier, gender) {
+    let tenses = [];
+
+    let actTenses = fillSubjunctiveAct(stems[2], modifier);
+    let passTenses = fillIndCompPass(stems[3], Endings.Tenses.PERFECT_SUBJUNCT_PASS, gender);
+
+    tenses = tenses.concat(actTenses);
+    tenses = tenses.concat(passTenses);
+
+    return tenses;
+}
+
+function fillSubjunctivePluperfect(stems, modifier, gender) {
+    let tenses = [];
+
+    let actTenses = fillSubjunctiveAct(stems[2] + "i", modifier);
+    let passTenses = fillIndCompPass(stems[3], Endings.Tenses.PLUPERF_SUBJUNCT_PASS, gender);
+
+    tenses = tenses.concat(actTenses);
+    tenses = tenses.concat(passTenses);
+
+    return tenses;
+}
+
+function fillSubjunctive(wordStems, conjugation, gender) {
+    let tenses = [];
+    let presentModifier = Endings.Subjunctives.PRESENT_MODS[conjugation - 1];
+
+    let present = fillSubjunctiveCont(wordStems[1], presentModifier);
+    let imperfect = fillSubjunctiveCont(wordStems[1], Endings.Infinitives.PRES_ACT[conjugation - 1]);
+    let perfect = fillSubjunctivePerfect(wordStems, "eri", gender);
+    let pluperfect = fillSubjunctivePluperfect(wordStems, "sse", gender)
+
+    tenses = tenses.concat(present);
+    tenses = tenses.concat(imperfect);
+    tenses = tenses.concat(perfect);
+    tenses = tenses.concat(pluperfect);
+
+    return tenses;
+}
+
+//---------------INFINITIVE--------------- (only depends on gender and number?)
+
+function fillInfinitivePresent(stem, conjugation) {
+    let tenses = [];
+
+    let presentInflect = Endings.Infinitives.PRES_ACT[conjugation - 1];
+
+    let actTense, passTense;
+
+    if (presentInflect != null) {
+        actTense = stem + presentInflect;
+        passTense = stem + presentInflect.replace("re", "ri");
+    }
+
+    tenses.push(actTense);
+    tenses.push(passTense);
+
+    return tenses;
+}
+
+function fillInfinitivePerfect(stems, gender, plural) {
+    let tenses = [];
+
+    let actTense = stems[2] + "isse";
+    let passTense = stems[3] + matchGenderEnding(gender, plural) + " esse";
+
+    tenses.push(actTense);
+    tenses.push(passTense);
+
+    return tenses;
+}
+
+function fillInfinitiveFuture(stem, gender, plural) {
+    let tenses = [];
+    let genderEnding = matchGenderEnding(gender, plural);
+
+    let actTense = stem + "ur" + genderEnding + " esse";
+    let passTense = stem + genderEnding + " iri";
+
+    tenses.push(actTense);
+    tenses.push(passTense);
+
+    return tenses;
+}
+
+function fillInfinitive(wordStems, conjugation, gender) {
+    let tenses = [];
+
+    let present = fillInfinitivePresent(wordStems[1], conjugation);
+    let perfect = fillInfinitivePerfect(wordStems, gender);
+    let future = fillInfinitiveFuture(wordStems[3], gender);
+
+    tenses = tenses.concat(present);
+    tenses = tenses.concat(perfect);
+    tenses = tenses.concat(future);
+
+    return tenses;
+}
+
+//------------------PARTICIPLES--------------------
+
+function fillParticiplePresent(stem, conjugation, gender) {
+    let cases = [];
+    let conjugationMod;
+    Endings.Infinitives.PRES_ACT[conjugation - 1] != null ? conjugationMod = Endings.Infinitives.PRES_ACT[conjugation - 1][0] : null;
+    conjugationMod == "i" ? conjugationMod += "e" : null;
+
+    cases.push(stem + conjugationMod + "ns");
+    for (let i = 1; i < Endings.Nouns.THIRD.length; i++) {
+        let nCase = stem + conjugationMod + "nt" + Endings.Nouns.THIRD[i];
+        cases.push(nCase);
+    }
+
+    for (let i = 0; i < Endings.Nouns.THIRD.length; i++) {
+        cases.push("XXXX");
+    }
+
+    cases[6] = cases[6].substring(0, cases[6].length - 3) +
+        cases[6].substring(cases[6].length - 3, cases[6].length).replace("um", "ium");
+
+    if (gender == "N") { //The neuter nominative and accusative endings are the same
+        cases[3] = cases[0]; // and the plural nominative and accusative endings end in the letter A - HI PAWS
+        cases[5] = cases[5].substring(0, cases[5].length - 3) +
+            cases[5].substring(cases[5].length - 3, cases[5].length).replace("tes", "tia");
+        cases[8] = cases[5];
+    }
+
+    return cases;
+}
+
+function fillParticiplePerfect(stem, genderEndings) {
+    let cases = [];
+
+    for (let i = 0; i < genderEndings.length; i++) {
+        cases.push("XXXX");
+    }
+
+    for (let i = 0; i < genderEndings.length; i++) {
+        let nCase = stem + genderEndings[i];
+        cases.push(nCase);
+    }
+
+    return cases;
+}
+
+function fillParticipleFutureAct(stem, genderEndings) {
+    let cases = [];
+    for (let i = 0; i < genderEndings.length; i++) {
+        let nCase = stem + "ur" + genderEndings[i];
+        cases.push(nCase);
+    }
+
+    return cases;
+}
+
+function fillParticipleGerundive(stem, genderEndings) {
+    let cases = [];
+
+    for (let i = 0; i < genderEndings.length; i++) {
+        let nCase = stem + genderEndings[i];
+        cases.push(nCase);
+    }
+
+    return cases;
+}
+
+//MAKE REPLACEFROM() FUNCTION
+
+function fillParticipleFuture(stems, genderEndings, nomStem) {
+    let cases = [];
+
+    nomStem = replaceFrom(nomStem, nomStem.length - 1, nomStem.length, "s", "d");
+
+    let activeCases = fillParticipleFutureAct(stems[3], genderEndings);
+    let gerundiveCases = fillParticipleGerundive(nomStem, genderEndings);
+
+    cases = cases.concat(activeCases);
+    cases = cases.concat(gerundiveCases);
+
+    return cases;
+}
+
+function fillParticiple(wordStems, conjugation, gender = "M") {
+    let cases = [];
+    let genderEndings = getGenderEndingArray(gender);
+
+    let present = fillParticiplePresent(wordStems[1], conjugation, gender);
+    let perfect = fillParticiplePerfect(wordStems[3], genderEndings);
+
+    cases = cases.concat(present); //To quickly get gerundive stem from present nominative case
+    let future = fillParticipleFuture(wordStems, genderEndings, cases[0]);
+
+    cases = cases.concat(perfect);
+    cases = cases.concat(future);
+
+    return cases;
+}
+
+//------------------IMPERATIVES--------------------
+
+function fillImperativeAct(stem, conjugation) {
+    let tenses = [];
+    let conjugationMod;
+    Endings.Infinitives.PRES_ACT[conjugation - 1] != null ? conjugationMod = Endings.Infinitives.PRES_ACT[conjugation - 1][0] : null;
+
+    let sing = stem + conjugationMod;
+    conjugationMod == "e" ? conjugationMod = "i" : null;
+    let plural = stem + conjugationMod + "te";
+
+    tenses.push(sing);
+    tenses.push(plural);
+
+    return tenses;
+}
+
+function fillImperative(stems, conjugation) {
+    let tenses = [];
+
+    let activeTenses = fillImperativeAct(stems[1], conjugation);
+    tenses = tenses.concat(activeTenses);
+
+    return tenses;
+}
+
+function fillVerbEndings(wordStems, conjugation, gender) {
+    let verbTenses = [];
+
+    // These depend on second principle part, so inflections are more complicated. // ---INDICATIVE CONTINUING
+    verbTenses = verbTenses.concat(fillPresent(wordStems, conjugation)); // Present Act and Pass
+    verbTenses = verbTenses.concat(fillImperfect(wordStems, conjugation)); // Imperf Act and Pass
+    verbTenses = verbTenses.concat(fillFuture(wordStems, conjugation)); // Future Act and Pass
+
+    // These only depend on third principle part, so we can use standard endings. // ---INDICATIVE COMPLETED
+    verbTenses = verbTenses.concat(fillPerfect(wordStems, gender)); // Perfect Act and Pass
+    verbTenses = verbTenses.concat(fillPluperfect(wordStems, gender)); // Pluperfect Act and Pass
+    verbTenses = verbTenses.concat(fillFuturePerfect(wordStems, gender)); // Future Perfect Act and Pass
+
+    verbTenses = verbTenses.concat(fillSubjunctive(wordStems, conjugation, gender)); // Subjucntive
+    verbTenses = verbTenses.concat(fillInfinitive(wordStems, conjugation, gender)); // Infinitive
+    verbTenses = verbTenses.concat(fillParticiple(wordStems, conjugation, gender)); // Participles
+    verbTenses = verbTenses.concat(fillImperative(wordStems, conjugation)) // Imperative
+
+    return verbTenses;
+}
+
+function fillEndings(entry) {
+    if (entry.wordType == "N") {
+        entry.nounCases = fillNounEndings(entry.wordStems, entry.declension, entry.gender);
+    }
+    else if (entry.wordType == "V") {
+        entry.verbTenses = fillVerbEndings(entry.wordStems, entry.conjugation, entry.gender);
+    }
+}
+
+//----------------PARSE DICTIONARY------------------
+
+function addEntrySuggestion(entry) {
+    if (entry.wordType == "N" && entry.nounCases[0] != null) {
+        entrySuggestions.push(entry);
+        entry.displayText = entry.nounCases[0] + ", " + entry.nounCases[1] + " (" + entry.gender + ")";
+        suggestions.push(entry.displayText);
+    }
+    else if (entry.wordType == "V" && entry.verbTenses != null) {
+        entrySuggestions.push(entry);
+        entry.displayText = entry.verbTenses[0] + ", " + entry.verbTenses[120] + ", " + entry.verbTenses[36] + ", " + entry.verbTenses[156] + " (" + entry.conjugation + ")";
+        suggestions.push(entry.displayText);
+    }
+}
+
+//make entry an object
+function parseDictionary(dictionary) {
+    let choppedDict = dictionary.split("\n");
+
+    for (let i = 0; i < choppedDict.length; i++) { //Loop through every entry
+        let entry = parseEntryLine(choppedDict[i]);
+        globalEntries.push(entry);
+        addEntrySuggestion(entry);
+    }
+}
+
+function determineEntryConjugation(entryString, variation) {
+    let conjugation = null;
+    if (parseInt(entryString[83]) == 3 && variation == 4) {
+        conjugation = 4;
+    }
+    else {
+        conjugation = parseInt(entryString[83]);
+
+    }
+    return conjugation
+}
+
+function parseEntryLine(entryString) {
+    let entry = new Entry(); // Define empty entry object from class
+
+    entry.dictEntry = entryString; // Full entry
+    entry.wordType = entry.dictEntry[76]; // wordType
+
+    entry.variation = parseInt(entry.dictEntry[85]); // Variation (same index for both nouns and verbs)
+    if (entry.wordType == "N") { // If word is noun type
+        entry.declension = parseInt(entry.dictEntry[83]); // Noun declension
+        entry.gender = entry.dictEntry[87]; // Noun gender
+    }
+    else { // If word is not noun type (e.g. word is a verb), define verb conjugation based on variation 
+        entry.conjugation = determineEntryConjugation(entry.dictEntry, entry.variation);
+    }
+    entry.definition = entry.dictEntry.slice(110); // Entry definition
+    entry.wordStems = getWordStems(entry.dictEntry); // Entry stems from first four columns
+
+    fillEndings(entry); // Use all entry properties to fill every possible word form
+
+    return entry; // Return an entry object with all necessary properties
+}
+
+function getWordStems(entryString) {
+    let stems = [];
+    let tempWord = "";
+
+    for (let i = 0; i <= 57; i += 19) { //splits stems every 19 characters I am a genius
+        for (let j = i; j < i + 19; j++) {
+            if (entryString[j] == " ") {
+                break;
+            }
+            tempWord += entryString[j];
+        }
+        stems.push(tempWord);
+        tempWord = "";
+    }
+
+    return stems;
+}
+
+initUI();
+getDictionary();</script></body><html>

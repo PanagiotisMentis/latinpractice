@@ -1,0 +1,102 @@
+html * {
+    button {
+    background-color: #b99dff;
+    outline-color: grey;
+    border: none;
+    border-radius:  0.6rem;
+    padding: 0.5rem 1rem;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+
+#verbs {
+    overflow-x: hidden;
+}
+
+.row {
+    margin-top: 0.4rem;
+}
+
+.col {
+    padding: 1rem;
+}
+
+.grid_form {
+    width: 42rem;
+    margin-left: 2rem;
+}
+
+.container-fluid {
+    padding: 1rem;
+    border: 0.4rem solid #524765;
+    border-radius:  0.6rem;
+}
+
+.word_suggestion {
+    display: block;
+    border-color: aliceblue;
+    background-color: aliceblue;
+}
+
+.study-list-element:hover {
+    background-color: #D9D9D9;
+    color: grey;
+}
+
+.results-list-correct {
+    color: #31DA2B;
+}
+
+.results-list-correct:hover {
+    background-color: #B8FFB6;
+}
+
+.results-list-incorrect {
+    color: red;
+    /* background-color: none; */
+}
+
+.results-list-incorrect:hover {
+    background-color: #FFB5C1;
+}
+
+.current-study-word-header {
+    text-decoration: underline;
+}
+
+.check_answers_button {
+    position: absolute;
+    left: 50%;
+}
+
+.corner_button {
+    position: absolute;
+    top: 80%;
+    left: 75%;
+}
+
+.form-select {
+    background-color: #b99dff;
+    border-radius:  0.6rem;
+}
+
+#autocomplete_search {
+    position: absolute;
+    top: 10%;
+    left: 75%;
+}
+
+.words_list {
+    position: absolute;
+    left: 10%;
+    top: 10%;
+}
+
+#next_word_button {
+    position: absolute;
+    left: 90%;
+}
+    font-family: 'Times New Roman', Times, serif;
+}
