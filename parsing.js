@@ -8,7 +8,8 @@
 //BE CAREFUL FOR IO VERBS
 
 const GLOBAL_VOWELS = "aeiou";
-
+let suggestions = [];
+let entrySuggestions = [];
 
 function replaceFrom(string, indexStart, indexEnd, existingSubStr, replacementSubStr) {
     let str = string;
@@ -545,13 +546,16 @@ function addEntrySuggestion(entry) {
 
 //make entry an object
 export function parseDictionary(dictionary) {
+    let entries = [];
     let choppedDict = dictionary.split("\n");
 
     for (let i = 0; i < choppedDict.length; i++) { //Loop through every entry
         let entry = parseEntryLine(choppedDict[i]);
-        globalEntries.push(entry);
+        entries.push(entry);
         addEntrySuggestion(entry);
     }
+
+    return [entries, suggestions, entrySuggestions];
 }
 
 function determineEntryConjugation(entryString, variation) {

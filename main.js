@@ -610,6 +610,14 @@ function initUI() {
 async function getDictionary() {
     let data = await fetch(dictUrl); // Wait until URL data is fetched.
     globalDictionary = await data.text(); // Wait until text is loaded from URL data.
-    Parsing.parseDictionary(globalDictionary); // Parse all dictionary data into useable word forms.
+
+    let parsedData = Parsing.parseDictionary(globalDictionary); // Parse all dictionary data into useable word forms.
+    globalEntries = parsedData[0];
+    suggestions = parsedData[1];
+    entrySuggestions = parsedData[2];
+
     mainMenu.hidden = false; //Finally display GUI for users.
 }
+
+initUI();
+getDictionary();
