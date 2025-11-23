@@ -18,13 +18,13 @@
         <div class="col">
             <div id="autocomplete_search" style="width:300px;">
                 <input id="word_search_box" type="text" name="word_search_box" placeholder="Please enter a Latin word...">
-                <button id="submit_word_search_input" type="submit" onclick="submitStudyWord()">Submit</button>
+                <button id="submit_word_search_input" type="submit">Submit</button>
 
                 <div id="suggestions" class="suggestions"></div>
             </div>
         </div>
     </div>
-    <button id="begin_practicing_button" class="corner_button" onclick="showNextStudyScreen()">Begin Practicing</button>
+    <button id="begin_practicing_button" class="corner_button">Begin Practicing</button>
 </container>
 
 <div class="grid" id="verbs_screen">
@@ -379,8 +379,8 @@
 </div>
 </div>
 
-<button id="check_verbs_button" class="check_answers_button" type="submit" onclick="checkVerbForms()">Submit</button>
-<button id="next_word_verbs_button" class="check_answers_button" type="submit" onclick="showNextStudyScreen()">Next</button>
+<button id="check_verbs_button" class="check_answers_button" type="submit">Submit</button>
+<button id="next_word_verbs_button" class="check_answers_button" type="submit">Next</button>
 </div>
 
 <div class="grid-form" id="nouns_screen">
@@ -431,15 +431,15 @@
             </div>
         </div>
     </div>
-	<button id="check_nouns_button" class="check_answers_button" type="submit" onclick="checkNounForms()">Submit</button>
-	<button id="next_word_nouns_button" class="check_answers_button" type="submit" onclick="showNextStudyScreen()">Next</button>
+	<button id="check_nouns_button" class="check_answers_button" type="submit">Submit</button>
+	<button id="next_word_nouns_button" class="check_answers_button" type="submit">Next</button>
 </div>
 
 <div id="results_screen">
     <ul id="results_words_list" class="list-group list-group-flush words_list">
         <h1><strong>Results<strong></h1>
     </ul>
-    <button id="return_main_menu_button" class="corner_button" onclick="returnMainMenu()">Return Main Menu</button>
+    <button id="return_main_menu_button" class="corner_button">Return Main Menu</button>
 </div>
 <script type="module" src="main.js"></script>
 </body>

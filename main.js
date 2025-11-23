@@ -1,69 +1,5 @@
-import * as Parsing from "./parsing.js"
-
-class Entry {
-    constructor(
-        dictEntry, 
-        definition, 
-        wordType, 
-        conjugation, 
-        declension, 
-        gender, 
-        variation, 
-        wordStems, 
-        nounCases, 
-        verbTenses, 
-        displayText, 
-        incorrect, 
-        userAnswers
-    ) {
-        this.dictEntry = dictEntry; // Full string entry
-        this.definition = definition; // String definition
-
-        this.wordType = wordType; // Character for type (eg. noun or verb)
-        this.conjugation = conjugation; // Integer for verb conjugation
-        this.declension = declension; // Integer for noun declension.
-        this.gender = gender; // Character for noun gender
-        this.variation = variation; // Integer for word variation (same position in entry string for both noun and verb)
-        
-        this.wordStems = wordStems; // Key pieces of words to form principle parts
-        this.nounCases = nounCases; // All possible noun forms
-        this.verbTenses = verbTenses; // All possible verb forms
-        this.displayText = displayText; // Principle parts to display for user when selecting study words
-
-        this.incorrect = incorrect; // Boolean for if user submit all correct word forms
-        this.userAnswers = userAnswers; // 2D array: array of user inputted answers per element of word form group array
-                                        // (E.g. userAnswers[0][1] gives the second user answer for the present tense if verb) 
-    }
-}
-
-class Endings {
-    static Nouns = class {
-        static FIRST = ["a", "ae", "ae", "am", "a", "ae", "arum", "is", "as", "is"];
-        static SECOND = ["us", "i", "o", "um", "o", "i", "orum", "is", "os", "is"];
-        static SECOND_NEUTER = ["um", "i", "o", "um", "o", "a", "orum", "is", "a", "is"];
-        static THIRD = ["", "is", "i", "em", "e", "es", "um", "ibus", "es", "ibus"];
-    }
-    static Tenses = class {
-        static PRES_ACT = ["o", "s", "t", "mus", "tis", "nt"];
-        static PRES_PASS = ["r", "ris", "tur", "mur", "mini", "ntur"];
-
-        //We can use so many arrays here because there are no modifications
-        static PERFECT_ACT = ["i", "isti", "it", "imus", "istis", "erunt"];
-        static PLUPERF_ACT = ["eram", "eras", "erat", "eramus", "eratis", "erant"];
-        static FUTPERF_ACT = ["ero", "eris", "erit", "erimus", "eritis", "erint"];
-
-        static PERFECT_PASS = ["sum", "es", "est", "sumus", "estis", "sunt"];
-        static PERFECT_SUBJUNCT_PASS = ["sim", "sis", "sint", "simus", "sitis", "sint"];
-        static PLUPERF_SUBJUNCT_PASS = ["essem", "esses", "esset", "essemus", "essetis", "essent"];
-    }
-    static Infinitives = class {
-        static PRES_ACT = ["are", "ere", "ere", "ire"];
-    }
-    static Subjunctives = class {
-        static PRESENT_MODS = ["e", "ea", "a", "ia"];
-    }
-
-}
+import parseDictionary from "./parsing.js";
+import {Endings} from "./endings.js";
 
 let globalEntries = [];
 
@@ -76,6 +12,11 @@ const nounsScreen = document.getElementById("nouns_screen");
 const resultsScreen = document.getElementById("results_screen") 
 
 const studyWordSubmitButton = document.getElementById("submit_word_search_input");
+studyWordSubmitButton.addEventListener ("click", submitStudyWord);
+
+const beginPracticingButton = document.getElementById("begin_practicing_button");
+beginPracticingButton.addEventListener("click", showNextStudyScreen);
+
 const studyWordsUl = document.getElementById("study_words_list");
 const wordSearchBox = document.getElementById("word_search_box");
 const wordSuggestions = document.getElementById("suggestions");
@@ -83,7 +24,12 @@ const wordSuggestions = document.getElementById("suggestions");
 const resultsWordsUl = document.getElementById("results_words_list");
 
 const submitVerbsButton = document.getElementById("check_verbs_button");
+submitVerbsButton.addEventListener("click", checkVerbForms);
 const nextWordVerbsButton = document.getElementById("next_word_verbs_button");
+nextWordVerbsButton.addEventListener("click", showNextStudyScreen);
+
+const returnMainMenuButton = document.getElementById("return_main_menu_button");
+returnMainMenuButton.addEventListener("click", returnMainMenu);
 
 const verbStudyWord = document.getElementById("verb_study_word_principle_parts");
 const selectGenderDropdown = document.getElementById("select_gender_dropdown");
@@ -91,8 +37,11 @@ const selectPersonDropdown = document.getElementById("select_person_dropdown");
 const selectNumberDropdown = document.getElementById("select_number_dropdown");
 
 const nounStudyWord = document.getElementById("noun_study_word_principle_parts");
+
 const submitNounsButton = document.getElementById("check_nouns_button");
+submitNounsButton.addEventListener("click", checkNounForms);
 const nextWordNounsButton = document.getElementById("next_word_nouns_button");
+nextWordNounsButton.addEventListener("click", showNextStudyScreen);
 
 let suggestions = [];
 let entrySuggestions = [];
@@ -539,7 +488,7 @@ function checkVerbForms() {
 
 function displayIncorrectNounAnswers(formName, incorrects) {
     var allForms = document.getElementsByClassName(formName);
-    for (let i = 0; i < Endings.Nouns.FIRST.length; i++) {
+    for (let i = 0; i < Endings.Nouns.FIRST.length; i++) { //Change loop max to Endings.Nouns.FIRST.length.
         if (incorrects.includes(i)) {
             allForms[i].style.backgroundColor = "#FF7F7F";
             allForms[i].value += " *" + currentStudyWord.nounCases[i];
@@ -609,9 +558,9 @@ function initUI() {
 
 async function getDictionary() {
     let data = await fetch(dictUrl); // Wait until URL data is fetched.
-    globalDictionary = await data.text(); // Wait until text is loaded from URL data.
+    let globalDictionary = await data.text(); // Wait until text is loaded from URL data.
 
-    let parsedData = Parsing.parseDictionary(globalDictionary); // Parse all dictionary data into useable word forms.
+    let parsedData = parseDictionary(globalDictionary); // Parse all dictionary data into useable word forms.
     globalEntries = parsedData[0];
     suggestions = parsedData[1];
     entrySuggestions = parsedData[2];
