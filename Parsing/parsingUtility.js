@@ -1,4 +1,4 @@
-import {Endings} from '../endings.js';
+import {Endings} from './endings.js';
 
 const GLOBAL_VOWELS = "aeiou";
 

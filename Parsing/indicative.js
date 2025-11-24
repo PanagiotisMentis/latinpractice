@@ -1,4 +1,4 @@
-import {Endings} from '../endings.js';
+import {Endings} from './endings.js';
 import * as Utility from './parsingUtility.js';
 
 //---------------INDICATIVE CONTINUING---------------
