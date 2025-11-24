@@ -3,7 +3,7 @@ import * as Utility from "./parsingUtility.js";
 
 //------------------PARTICIPLES--------------------
 
-export function fillParticiplePresent(stem, conjugation, gender) {
+function fillParticiplePresent(stem, conjugation, gender) {
     let cases = [];
     let conjugationMod;
     Endings.Infinitives.PRES_ACT[conjugation - 1] != null ? conjugationMod = Endings.Infinitives.PRES_ACT[conjugation - 1][0] : null;
@@ -32,7 +32,7 @@ export function fillParticiplePresent(stem, conjugation, gender) {
     return cases;
 }
 
-export function fillParticiplePerfect(stem, genderEndings) {
+function fillParticiplePerfect(stem, genderEndings) {
     let cases = [];
 
     for (let i = 0; i < genderEndings.length; i++) {
@@ -47,7 +47,7 @@ export function fillParticiplePerfect(stem, genderEndings) {
     return cases;
 }
 
-export function fillParticipleFutureAct(stem, genderEndings) {
+function fillParticipleFutureAct(stem, genderEndings) {
     let cases = [];
     for (let i = 0; i < genderEndings.length; i++) {
         let nCase = stem + "ur" + genderEndings[i];
@@ -57,7 +57,7 @@ export function fillParticipleFutureAct(stem, genderEndings) {
     return cases;
 }
 
-export function fillParticipleGerundive(stem, genderEndings) {
+function fillParticipleGerundive(stem, genderEndings) {
     let cases = [];
 
     for (let i = 0; i < genderEndings.length; i++) {
@@ -69,7 +69,7 @@ export function fillParticipleGerundive(stem, genderEndings) {
 }
 
 //MAKE REPLACEFROM() funct
-export function fillParticipleFuture(stems, genderEndings, nomStem) {
+function fillParticipleFuture(stems, genderEndings, nomStem) {
     let cases = [];
 
     nomStem = Utility.replaceFrom(nomStem, nomStem.length - 1, nomStem.length, "s", "d");
@@ -79,6 +79,22 @@ export function fillParticipleFuture(stems, genderEndings, nomStem) {
 
     cases = cases.concat(activeCases);
     cases = cases.concat(gerundiveCases);
+
+    return cases;
+}
+
+export function fillParticiple(wordStems, conjugation, gender = "M") {
+    let cases = [];
+    let genderEndings = Utility.getGenderEndingArray(gender);
+
+    let present = fillParticiplePresent(wordStems[1], conjugation, gender);
+    let perfect = fillParticiplePerfect(wordStems[3], genderEndings);
+
+    cases = cases.concat(present); //To quickly get gerundive stem from present nominative case
+    let future = fillParticipleFuture(wordStems, genderEndings, cases[0]);
+
+    cases = cases.concat(perfect);
+    cases = cases.concat(future);
 
     return cases;
 }

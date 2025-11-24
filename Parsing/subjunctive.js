@@ -3,7 +3,7 @@ import * as Indicative from "./indicative.js";
 
 //---------------SUBJUNCTIVE---------------
 
-export function fillSubjunctiveAct(stem, modifier) {
+function fillSubjunctiveAct(stem, modifier) {
     let tenses = [];
 
     tenses.push(stem + modifier + "m");
@@ -15,7 +15,7 @@ export function fillSubjunctiveAct(stem, modifier) {
     return tenses;
 }
 
-export function fillSubjunctiveContPass(stem, modifier) {
+function fillSubjunctiveContPass(stem, modifier) {
     let tenses = [];
 
     tenses.push(stem + modifier + "r");
@@ -27,7 +27,7 @@ export function fillSubjunctiveContPass(stem, modifier) {
     return tenses;
 }
 
-export function fillSubjunctiveCont(stem, modifier) {
+function fillSubjunctiveCont(stem, modifier) {
     let tenses = [];
 
     let actTenses = fillSubjunctiveAct(stem, modifier);
@@ -39,7 +39,7 @@ export function fillSubjunctiveCont(stem, modifier) {
     return tenses;
 }
 
-export function fillSubjunctivePerfect(stems, modifier, gender) {
+function fillSubjunctivePerfect(stems, modifier, gender) {
     let tenses = [];
 
     let actTenses = fillSubjunctiveAct(stems[2], modifier);
@@ -51,7 +51,7 @@ export function fillSubjunctivePerfect(stems, modifier, gender) {
     return tenses;
 }
 
-export function fillSubjunctivePluperfect(stems, modifier, gender) {
+function fillSubjunctivePluperfect(stems, modifier, gender) {
     let tenses = [];
 
     let actTenses = fillSubjunctiveAct(stems[2] + "i", modifier);
@@ -59,6 +59,23 @@ export function fillSubjunctivePluperfect(stems, modifier, gender) {
 
     tenses = tenses.concat(actTenses);
     tenses = tenses.concat(passTenses);
+
+    return tenses;
+}
+
+export function fillSubjunctive(wordStems, conjugation, gender) {
+    let tenses = [];
+    let presentModifier = Endings.Subjunctives.PRESENT_MODS[conjugation - 1];
+
+    let present = fillSubjunctiveCont(wordStems[1], presentModifier);
+    let imperfect = fillSubjunctiveCont(wordStems[1], Endings.Infinitives.PRES_ACT[conjugation - 1]);
+    let perfect = fillSubjunctivePerfect(wordStems, "eri", gender);
+    let pluperfect = fillSubjunctivePluperfect(wordStems, "sse", gender)
+
+    tenses = tenses.concat(present);
+    tenses = tenses.concat(imperfect);
+    tenses = tenses.concat(perfect);
+    tenses = tenses.concat(pluperfect);
 
     return tenses;
 }

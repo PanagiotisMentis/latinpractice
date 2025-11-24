@@ -3,7 +3,7 @@ import * as Utility from './parsingUtility.js';
 
 //---------------INFINITIVE--------------- (only depends on gender and number?)
 
-export function fillInfinitivePresent(stem, conjugation) {
+function fillInfinitivePresent(stem, conjugation) {
     let tenses = [];
 
     let presentInflect = Endings.Infinitives.PRES_ACT[conjugation - 1];
@@ -21,7 +21,7 @@ export function fillInfinitivePresent(stem, conjugation) {
     return tenses;
 }
 
-export function fillInfinitivePerfect(stems, gender, plural) {
+function fillInfinitivePerfect(stems, gender, plural) {
     let tenses = [];
 
     let actTense = stems[2] + "isse";
@@ -33,7 +33,7 @@ export function fillInfinitivePerfect(stems, gender, plural) {
     return tenses;
 }
 
-export function fillInfinitiveFuture(stem, gender, plural) {
+function fillInfinitiveFuture(stem, gender, plural) {
     let tenses = [];
     let genderEnding = Utility.matchGenderEnding(gender, plural);
 
@@ -42,6 +42,21 @@ export function fillInfinitiveFuture(stem, gender, plural) {
 
     tenses.push(actTense);
     tenses.push(passTense);
+
+    return tenses;
+}
+
+//----------------INFINITIVES------------------------
+export function fillInfinitive(wordStems, conjugation, gender) {
+    let tenses = [];
+
+    let present = fillInfinitivePresent(wordStems[1], conjugation);
+    let perfect = fillInfinitivePerfect(wordStems, gender);
+    let future = fillInfinitiveFuture(wordStems[3], gender);
+
+    tenses = tenses.concat(present);
+    tenses = tenses.concat(perfect);
+    tenses = tenses.concat(future);
 
     return tenses;
 }
