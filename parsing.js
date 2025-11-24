@@ -1,6 +1,8 @@
 import {Endings} from "./endings.js";
 import * as Utility from "./Parsing/parsingUtility.js";
 import * as Indicative from "./Parsing/indicative.js";
+import * as Subjunctive from "./Parsing/subjunctive.js";
+import * as Participle from "./Parsing/participle.js";
 import * as Infinitive from "./Parsing/infinitive.js";
 
 class Entry {
@@ -139,76 +141,15 @@ function fillFuturePerfect(wordStems, gender) {
     return tenses;
 }
 
-//---------------SUBJUNCTIVE---------------
-
-function fillSubjunctiveAct(stem, modifier) {
-    let tenses = [];
-
-    tenses.push(stem + modifier + "m");
-    for (let i = 1; i < Endings.Tenses.PRES_ACT.length; i++) {
-        let tense = stem + modifier + Endings.Tenses.PRES_ACT[i];
-        tenses.push(tense);
-    }
-
-    return tenses;
-}
-
-function fillSubjunctiveContPass(stem, modifier) {
-    let tenses = [];
-
-    tenses.push(stem + modifier + "r");
-    for (let i = 1; i < Endings.Tenses.PRES_ACT.length; i++) {
-        let tense = stem + modifier + Endings.Tenses.PRES_PASS[i];
-        tenses.push(tense);
-    }
-
-    return tenses;
-}
-
-function fillSubjunctiveCont(stem, modifier) {
-    let tenses = [];
-
-    let actTenses = fillSubjunctiveAct(stem, modifier);
-    let passTenses = fillSubjunctiveContPass(stem, modifier);
-
-    tenses = tenses.concat(actTenses);
-    tenses = tenses.concat(passTenses);
-
-    return tenses;
-}
-
-function fillSubjunctivePerfect(stems, modifier, gender) {
-    let tenses = [];
-
-    let actTenses = fillSubjunctiveAct(stems[2], modifier);
-    let passTenses = Indicative.fillIndCompPass(stems[3], Endings.Tenses.PERFECT_SUBJUNCT_PASS, gender);
-
-    tenses = tenses.concat(actTenses);
-    tenses = tenses.concat(passTenses);
-
-    return tenses;
-}
-
-function fillSubjunctivePluperfect(stems, modifier, gender) {
-    let tenses = [];
-
-    let actTenses = fillSubjunctiveAct(stems[2] + "i", modifier);
-    let passTenses = Indicative.fillIndCompPass(stems[3], Endings.Tenses.PLUPERF_SUBJUNCT_PASS, gender);
-
-    tenses = tenses.concat(actTenses);
-    tenses = tenses.concat(passTenses);
-
-    return tenses;
-}
 
 function fillSubjunctive(wordStems, conjugation, gender) {
     let tenses = [];
     let presentModifier = Endings.Subjunctives.PRESENT_MODS[conjugation - 1];
 
-    let present = fillSubjunctiveCont(wordStems[1], presentModifier);
-    let imperfect = fillSubjunctiveCont(wordStems[1], Endings.Infinitives.PRES_ACT[conjugation - 1]);
-    let perfect = fillSubjunctivePerfect(wordStems, "eri", gender);
-    let pluperfect = fillSubjunctivePluperfect(wordStems, "sse", gender)
+    let present = Subjunctive.fillSubjunctiveCont(wordStems[1], presentModifier);
+    let imperfect = Subjunctive.fillSubjunctiveCont(wordStems[1], Endings.Infinitives.PRES_ACT[conjugation - 1]);
+    let perfect = Subjunctive.fillSubjunctivePerfect(wordStems, "eri", gender);
+    let pluperfect = Subjunctive.fillSubjunctivePluperfect(wordStems, "sse", gender)
 
     tenses = tenses.concat(present);
     tenses = tenses.concat(imperfect);
@@ -218,97 +159,15 @@ function fillSubjunctive(wordStems, conjugation, gender) {
     return tenses;
 }
 
-//------------------PARTICIPLES--------------------
-
-function fillParticiplePresent(stem, conjugation, gender) {
-    let cases = [];
-    let conjugationMod;
-    Endings.Infinitives.PRES_ACT[conjugation - 1] != null ? conjugationMod = Endings.Infinitives.PRES_ACT[conjugation - 1][0] : null;
-    conjugationMod == "i" ? conjugationMod += "e" : null;
-
-    cases.push(stem + conjugationMod + "ns");
-    for (let i = 1; i < Endings.Nouns.THIRD.length; i++) {
-        let nCase = stem + conjugationMod + "nt" + Endings.Nouns.THIRD[i];
-        cases.push(nCase);
-    }
-
-    for (let i = 0; i < Endings.Nouns.THIRD.length; i++) {
-        cases.push("XXXX");
-    }
-
-    cases[6] = cases[6].substring(0, cases[6].length - 3) +
-        cases[6].substring(cases[6].length - 3, cases[6].length).replace("um", "ium");
-
-    if (gender == "N") { //The neuter nominative and accusative endings are the same
-        cases[3] = cases[0]; // and the plural nominative and accusative endings end in the letter A - HI PAWS
-        cases[5] = cases[5].substring(0, cases[5].length - 3) +
-            cases[5].substring(cases[5].length - 3, cases[5].length).replace("tes", "tia");
-        cases[8] = cases[5];
-    }
-
-    return cases;
-}
-
-function fillParticiplePerfect(stem, genderEndings) {
-    let cases = [];
-
-    for (let i = 0; i < genderEndings.length; i++) {
-        cases.push("XXXX");
-    }
-
-    for (let i = 0; i < genderEndings.length; i++) {
-        let nCase = stem + genderEndings[i];
-        cases.push(nCase);
-    }
-
-    return cases;
-}
-
-function fillParticipleFutureAct(stem, genderEndings) {
-    let cases = [];
-    for (let i = 0; i < genderEndings.length; i++) {
-        let nCase = stem + "ur" + genderEndings[i];
-        cases.push(nCase);
-    }
-
-    return cases;
-}
-
-function fillParticipleGerundive(stem, genderEndings) {
-    let cases = [];
-
-    for (let i = 0; i < genderEndings.length; i++) {
-        let nCase = stem + genderEndings[i];
-        cases.push(nCase);
-    }
-
-    return cases;
-}
-
-//MAKE REPLACEFROM() funct
-function fillParticipleFuture(stems, genderEndings, nomStem) {
-    let cases = [];
-
-    nomStem = Utility.replaceFrom(nomStem, nomStem.length - 1, nomStem.length, "s", "d");
-
-    let activeCases = fillParticipleFutureAct(stems[3], genderEndings);
-    let gerundiveCases = fillParticipleGerundive(nomStem, genderEndings);
-
-    cases = cases.concat(activeCases);
-    cases = cases.concat(gerundiveCases);
-
-    return cases;
-}
-
 function fillParticiple(wordStems, conjugation, gender = "M") {
     let cases = [];
     let genderEndings = Utility.getGenderEndingArray(gender);
 
-    let present = fillParticiplePresent(wordStems[1], conjugation, gender);
-    let perfect = fillParticiplePerfect(wordStems[3], genderEndings);
+    let present = Participle.fillParticiplePresent(wordStems[1], conjugation, gender);
+    let perfect = Participle.fillParticiplePerfect(wordStems[3], genderEndings);
 
     cases = cases.concat(present); //To quickly get gerundive stem from present nominative case
-    let future = fillParticipleFuture(wordStems, genderEndings, cases[0]);
+    let future = Participle.fillParticipleFuture(wordStems, genderEndings, cases[0]);
 
     cases = cases.concat(perfect);
     cases = cases.concat(future);
